@@ -1,7 +1,12 @@
+import React from "react";
+
 const ListItemComponent = (props) => {
   return (
     <>
-      <li key={`${props.element}`}>{props.element}</li>
+      <li>
+        {props.item}
+        <button onClick={() => props.onDelete(props.id)}>Delete</button>
+      </li>
     </>
   );
 };

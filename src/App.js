@@ -1,5 +1,4 @@
 import ListComponent from "./ListComponent";
-import CounterComponent from "./CounterComponent";
 
 import "./App.css";
 
