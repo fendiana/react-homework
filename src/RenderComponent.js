@@ -1,6 +1,5 @@
 import React from "react";
 import TodosList from "./TodosList";
-import GrandChildComponent from "./GrandChindComponent";
 
 const RenderComponent = () => {
   const toDos = [
@@ -10,27 +9,11 @@ const RenderComponent = () => {
     { id: 4, todo: "fourthTodo" },
   ];
 
-  //   const myName = {
-  //     name: "Dina",
-  //   };
-
-  //   const myNameinArray = ["Dina"];
-
-  //   const myFunctionName = () => {
-  //     return "Dina";
-  //   };
-
   return (
     <div>
       {toDos.map((todo, index) => {
         return <TodosList key={index} todo={todo.todo} id={todo.id} />;
       })}
-
-      {/* <GrandChildComponent
-        myName={myName}
-        myNameinArray={myNameinArray}
-        myFunctionName={myFunctionName}
-      /> */}
     </div>
   );
 };
