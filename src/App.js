@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { useCounter } from "./useCounter";
+import useWindowWidth from "./useWindowWidth";
 
 function App() {
-  const { value, increment, decrement } = useCounter();
+  const width = useWindowWidth();
+
   return (
     <div className="App">
       <header className="App-header">
-        <p>{value}</p>
-        <button onClick={increment}>increment</button>
-        <button onClick={decrement}>decrement</button>
+        <p>Ширина вікна: {width}px</p>
       </header>
     </div>
   );
