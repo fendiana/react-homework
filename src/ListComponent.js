@@ -63,3 +63,10 @@ const ListComponent = () => {
 };
 
 export default ListComponent;
+
+// З лекції:
+
+// -----
+
+// const firstRenderValue = [];
+// !!firstRenderValue.length - до бульового значення, для перевірки у випадку якщо пустий масив
