@@ -4,7 +4,7 @@ class MyClassComponent extends Component {
   state = {
     todos: [],
     input: "",
-    timer: 0,
+    // timer: 0,
   };
 
   // 1

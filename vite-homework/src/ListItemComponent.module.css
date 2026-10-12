@@ -1,0 +1,20 @@
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.listItemDoneButton {
+  background-color: #d4e5ef;
+  color: #242019;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.listItemDoneButton:hover {
+  background-color: #c2dae9;
+}

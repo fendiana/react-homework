@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import ListItemComponent from "./ListItemComponent";
+import styles from "./ListComponent.module.css";
 
 const ListComponent = () => {
   const [input, setInput] = useState("");
@@ -40,14 +41,9 @@ const ListComponent = () => {
   };
 
   return (
-    <>
-      <input
-        onKeyDown={onEnterHandler}
-        onChange={onChangeHandler}
-        value={input}
-      />
-      <h3>{item.length}</h3>
-      <ul>
+    <div className={styles.listContainer}>
+      <h2 className={styles.listMainTitle}>My To Do List</h2>
+      <ul className={styles.list}>
         {item.map((item) => (
           <ListItemComponent
             key={item.id}
@@ -57,8 +53,18 @@ const ListComponent = () => {
           />
         ))}
       </ul>
-      <button onClick={onClickHandler}>Add TO DO</button>
-    </>
+      <h3 className={styles.taskCount}>tasks left: {item.length}</h3>
+      <input
+        className={styles.listInput}
+        onKeyDown={onEnterHandler}
+        onChange={onChangeHandler}
+        value={input}
+        placeholder="enter task..."
+      />
+      <button className={styles.listAddButton} onClick={onClickHandler}>
+        add TO DO
+      </button>
+    </div>
   );
 };
 

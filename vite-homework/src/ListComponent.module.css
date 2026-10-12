@@ -1,0 +1,71 @@
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 250px;
+  width: 100%;
+  padding: 20px;
+  margin: 50px auto;
+  background-color: #f0ebe7;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.listMainTitle {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #242019;
+}
+
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #242019;
+}
+
+.taskCount {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #242019;
+}
+
+.listInput {
+  align-self: center;
+  padding: 8px;
+  margin-bottom: 10px;
+  max-width: 220px;
+  width: 100%;
+  background-color: #f5f5f5;
+  border: 1px dashed #dbd4ce;
+  border-radius: 10px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+}
+
+.listInput::placeholder {
+  color: #dbd4ce;
+}
+
+.listInput:focus {
+  outline: none;
+  border-color: #b6cbde;
+}
+
+.listAddButton {
+  align-self: center;
+  padding: 8px 16px;
+  background-color: #b6cbde;
+  color: #242019;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.listAddButton:hover {
+  background-color: #a2c0dd;
+}

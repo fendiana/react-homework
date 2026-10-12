@@ -1,11 +1,11 @@
-import MyClassComponent from "./MyClassComponent";
+import ListComponent from "./ListComponent";
 
 import "./App.css";
 
 function App() {
   return (
     <>
-      <MyClassComponent />
+      <ListComponent />
     </>
   );
 }

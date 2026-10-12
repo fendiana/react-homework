@@ -1,11 +1,17 @@
 import React from "react";
+import styles from "./ListItemComponent.module.css";
 
 const ListItemComponent = (props) => {
   return (
     <>
-      <li>
+      <li className={styles.listItem}>
         {props.item}
-        <button onClick={() => props.onDelete(props.id)}>Delete</button>
+        <button
+          className={styles.listItemDoneButton}
+          onClick={() => props.onDelete(props.id)}
+        >
+          done
+        </button>
       </li>
     </>
   );
