@@ -19,6 +19,38 @@
   color: #242019;
 }
 
+.listFilterContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.listFilterTitle {
+  margin: 0;
+}
+
+.listFilter {
+  max-width: 110px;
+  width: 100%;
+  align-self: center;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #242019;
+  background-color: #f0ebe7;
+  border: 1px solid #dbd4ce;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.listFilter:focus {
+  border-color: #b6cbde;
+}
+
 .list {
   list-style-type: none;
   padding: 0;
@@ -30,6 +62,7 @@
   margin-top: 20px;
   text-align: center;
   font-size: 16px;
+  font-weight: bold;
   color: #242019;
 }
 
@@ -53,6 +86,13 @@
 .listInput:focus {
   outline: none;
   border-color: #b6cbde;
+}
+
+.error {
+  color: rgb(116, 0, 0);
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
 }
 
 .listAddButton {
