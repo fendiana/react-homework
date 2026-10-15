@@ -1,0 +1,26 @@
+{
+  "todos": [
+    {
+      "note": "read a chapter",
+      "description": "from a new book",
+      "completed": false,
+      "creationDate": "2026-10-15",
+      "id": "-dd-e8O9brc"
+    },
+    {
+      "note": "pet a cat",
+      "description": "",
+      "completed": false,
+      "creationDate": "2026-10-15",
+      "id": "M7dGudQnVKE"
+    },
+    {
+      "note": "buy flowers",
+      "description": "",
+      "completed": false,
+      "creationDate": "2026-10-15",
+      "id": "gwxuSiqneGI"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

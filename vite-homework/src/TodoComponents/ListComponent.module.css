@@ -1,7 +1,7 @@
 .listContainer {
   display: flex;
   flex-direction: column;
-  max-width: 250px;
+  max-width: 350px;
   width: 100%;
   padding: 20px;
   margin: 50px auto;
@@ -19,6 +19,13 @@
   color: #242019;
 }
 
+.listMessage {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #242019;
+}
+
 .listFilterContainer {
   display: flex;
   flex-direction: row;
@@ -30,6 +37,7 @@
 
 .listFilterTitle {
   margin: 0;
+  font-size: 18px;
 }
 
 .listFilter {
@@ -88,6 +96,22 @@
   border-color: #b6cbde;
 }
 
+.checkboxLabel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 8px;
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  accent-color: #dbd4ce;
+  cursor: pointer;
+}
+
 .error {
   color: rgb(116, 0, 0);
   font-size: 14px;
@@ -102,6 +126,7 @@
   color: #242019;
   border: none;
   border-radius: 10px;
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   cursor: pointer;
 }

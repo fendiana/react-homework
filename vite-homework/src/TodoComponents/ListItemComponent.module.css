@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px 10px;
   font-size: 16px;
   gap: 12px;
 }
@@ -21,6 +21,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.listItemEditButton {
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #dbd4ce;
+  background-color: #f0ebe7;
+  border: none;
+  cursor: pointer;
 }
 
 .checkbox {

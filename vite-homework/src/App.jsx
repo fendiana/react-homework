@@ -1,4 +1,4 @@
-import ListComponent from "./ListComponent";
+import ListComponent from "./TodoComponents/ListComponent";
 
 import "./App.css";
 

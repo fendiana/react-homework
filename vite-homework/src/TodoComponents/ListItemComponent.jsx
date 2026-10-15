@@ -6,6 +6,12 @@ const ListItemComponent = (props) => {
     <li className={styles.listItem}>
       <p className={props.completed ? styles.completed : ""}>{props.item}</p>
       <div className={styles.changeBtns}>
+        <button
+          className={styles.listItemEditButton}
+          onClick={() => props.onEdit(props.id)}
+        >
+          edit
+        </button>
         <input
           className={styles.checkbox}
           type="checkbox"
@@ -15,6 +21,7 @@ const ListItemComponent = (props) => {
         <button
           className={styles.listItemDoneButton}
           onClick={() => props.onDelete(props.id)}
+          disabled={props.isDeleting}
         >
           X
         </button>
