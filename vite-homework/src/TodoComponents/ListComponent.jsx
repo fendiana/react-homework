@@ -1,248 +1,105 @@
-import { useState, useEffect } from "react";
-import ListItemComponent from "./ListItemComponent";
+import { useState } from "react";
+import useTodos from "../hooks/useTodos";
+
+import TodoForm from "./TodoForm";
+import TodoFilter from "./TodoFilter";
+import TodoList from "./TodoList";
+import TodoStatus from "./TodoStatus";
+import TodoCount from "./TodoCount";
+
 import styles from "./ListComponent.module.css";
-import { API_URL, getTodos } from "../api/todosApi";
+
+const EMPTY_FORM = {
+  note: "",
+  description: "",
+  completed: false,
+  creationDate: "",
+};
 
 const ListComponent = () => {
-  const MIN_LENGTH = 3;
-  const MAX_LENGTH = 30;
+  const {
+    item,
+    isLoading,
+    fetchError,
+    requestError,
+    setRequestError,
+    isSaving,
+    isEditLoading,
+    deletingId,
+    saveTodo,
+    loadTodoById,
+    toggleTodo,
+    removeTodo,
+  } = useTodos();
 
   const [showForm, setShowForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setFetchError] = useState("");
-
   const [editingId, setEditingId] = useState(null);
-  const [editingCreationDate, setEditingCreationDate] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const [isEditLoading, setIsEditLoading] = useState(false);
-  const [deletingId, setDeletingId] = useState(null);
-  const [requestError, setRequestError] = useState("");
-
-  const [formData, setFormData] = useState({
-    note: "",
-    description: "",
-    completed: false,
-  });
-  const [item, setItem] = useState([]);
-
+  const [initialData, setInitialData] = useState(() => ({ ...EMPTY_FORM }));
   const [filter, setFilter] = useState("all");
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        setFetchError("");
-
-        const data = await getTodos();
-
-        setItem(data);
-      } catch (error) {
-        console.error("Error: ", error);
-        setFetchError(error.message || "Failed to load :(");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const filteredItems = item.filter((item) => {
+  const filteredItems = item.filter((todo) => {
     if (filter === "active") {
-      return !item.completed;
+      return !todo.completed;
     }
     if (filter === "completed") {
-      return item.completed;
+      return todo.completed;
     }
+
     return true;
   });
 
-  const onClickHandler = async () => {
-    const note = formData.note.trim();
-
-    if (!note) {
-      setError("task cannot be empty");
-      return;
-    }
-
-    if (note.length < MIN_LENGTH) {
-      setError(`task must be at least ${MIN_LENGTH} characters long`);
-      return;
-    }
-    if (note.length > MAX_LENGTH) {
-      setError(`task must be no more than ${MAX_LENGTH} characters long`);
-      return;
-    }
-
-    const isEditing = editingId !== null;
-
-    const todoData = {
-      note,
-      description: formData.description.trim(),
-      completed: formData.completed,
-      creationDate: isEditing
-        ? editingCreationDate
-        : new Date().toISOString().slice(0, 10),
-    };
-
-    try {
-      setIsSaving(true);
-      setError("");
-      setRequestError("");
-
-      const response = await fetch(
-        isEditing ? `${API_URL}/${editingId}` : API_URL,
-        {
-          method: isEditing ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(todoData),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-
-      const saveTodo = await response.json();
-
-      if (isEditing) {
-        setItem((prev) =>
-          prev.map((item) => (item.id === editingId ? saveTodo : item)),
-        );
-      } else {
-        setItem((prev) => [...prev, saveTodo]);
-      }
-
-      setFormData({
-        note: "",
-        description: "",
-        completed: false,
-      });
-      setEditingId(null);
-      setEditingCreationDate("");
-      setShowForm(false);
-    } catch (error) {
-      setRequestError(
-        isEditing ? "Couldn't save changes :(" : "Couldn't add task :(",
-      );
-    } finally {
-      setIsSaving(false);
-    }
-
-    // setFormData({ ...formData, note: "" });
-    // setShowForm(false);
+  const onAddClickHandler = () => {
+    setEditingId(null);
+    setInitialData({ ...EMPTY_FORM });
+    setRequestError("");
+    setShowForm(true);
   };
-
-  // const onChangeHandler = (e) => {
-  //   const value = e.target.value;
-  //   setInput(value);
-  //   setError("");
-  // };
-
-  // const onEnterHandler = (e) => {
-  //   if (e.key === "Enter") {
-  //     onClickHandler();
-  //   }
-  // };
 
   const onEditHandler = async (id) => {
-    try {
-      setIsEditLoading(true);
-      setRequestError("");
-      setError("");
+    const todo = await loadTodoById(id);
 
-      const response = await fetch(`${API_URL}/${id}`);
+    if (!todo) return;
 
-      if (!response.ok) {
-        throw new Error("Failed to load task");
-      }
+    setEditingId(todo.id);
 
-      const todo = await response.json();
+    setInitialData({
+      note: todo.note ?? "",
+      description: todo.description ?? "",
+      completed: todo.completed ?? false,
+      creationDate: todo.creationDate ?? "",
+    });
 
-      setEditingId(todo.id);
-      setEditingCreationDate(todo.creationDate || "");
-
-      setFormData({
-        note: todo.note,
-        description: todo.description,
-        completed: todo.completed,
-      });
-
-      setShowForm(true);
-    } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Couldn't load task :(");
-    } finally {
-      setIsEditLoading(false);
-    }
+    setShowForm(true);
   };
 
-  const onDoneHandler = async (id) => {
-    const currentTodo = item.find((todo) => todo.id === id);
-
-    if (!currentTodo) return;
-
-    const updatedTodo = {
-      ...currentTodo,
-      completed: !currentTodo.completed,
+  const onSubmitHandler = async (formData) => {
+    const todoData = {
+      note: formData.note.trim(),
+      description: formData.description.trim(),
+      completed: formData.completed,
+      creationDate:
+        editingId !== null
+          ? initialData.creationDate
+          : new Date().toISOString().slice(0, 10),
     };
 
-    try {
+    const success = await saveTodo(todoData, editingId);
+
+    if (success) {
+      setShowForm(false);
+      setEditingId(null);
+      setInitialData({ ...EMPTY_FORM });
       setRequestError("");
-
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedTodo),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update task");
-      }
-
-      const savedTodo = await response.json();
-
-      setItem((prev) =>
-        prev.map((todo) => (todo.id === id ? savedTodo : todo)),
-      );
-    } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Couldn't update task :(");
     }
-  };
 
-  const onDeleteHandler = async (id) => {
-    try {
-      setDeletingId(id);
-      setRequestError("");
-
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
-
-      setItem((prev) => prev.filter((todo) => todo.id !== id));
-    } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Couldn't delete task :(");
-    } finally {
-      setDeletingId(null);
-    }
+    return success;
   };
 
   if (isLoading) {
     return (
       <div className={styles.listContainer}>
         <h2 className={styles.listMainTitle}>My To Do List</h2>
-        <p className={styles.listMessage}>Loading tasks...</p>
+        <TodoStatus type="loading" />
       </div>
     );
   }
@@ -251,7 +108,7 @@ const ListComponent = () => {
     return (
       <div className={styles.listContainer}>
         <h2 className={styles.listMainTitle}>My To Do List</h2>
-        <p className={styles.error}>{fetchError}</p>
+        <TodoStatus type="error" message={fetchError} />
       </div>
     );
   }
@@ -259,116 +116,44 @@ const ListComponent = () => {
   return (
     <div className={styles.listContainer}>
       <h2 className={styles.listMainTitle}>My To Do List</h2>
-      {requestError && <p className={styles.error}>{requestError}</p>}
-      {item.length === 0 && !showForm && (
-        <p className={styles.listMessage}>You have no tasks yet</p>
+      {requestError && !showForm && (
+        <TodoStatus type="error" message={requestError} />
       )}
+      {isEditLoading && <TodoStatus type="loading" message="loading task..." />}
+      {item.length === 0 && !showForm && <TodoStatus type="empty" />}
       {item.length > 0 && (
         <>
-          <div className={styles.listFilterContainer}>
-            <h3 className={styles.listFilterTitle}>tasks:</h3>
-            <select
-              className={styles.listFilter}
-              value={filter}
-              name="filter"
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <option value="all">all</option>
-              <option value="active">active</option>
-              <option value="completed">completed</option>
-            </select>
-          </div>
-          <ul className={styles.list}>
-            {filteredItems.map((item) => (
-              <ListItemComponent
-                key={item.id}
-                id={item.id}
-                item={item.note}
-                onDone={onDoneHandler}
-                onDelete={onDeleteHandler}
-                onEdit={onEditHandler}
-                isDeleting={deletingId === item.id}
-                completed={item.completed}
-              />
-            ))}
-          </ul>
-          <p className={styles.taskCount}>
-            tasks left: {item.filter((item) => !item.completed).length}
-          </p>
+          <TodoFilter filter={filter} onChange={setFilter} />
+          <TodoList
+            items={filteredItems}
+            onDone={toggleTodo}
+            onDelete={removeTodo}
+            onEdit={onEditHandler}
+            deletingId={deletingId}
+          />
+          <TodoCount items={item} />
         </>
       )}
       {!showForm && (
-        <button
-          className={styles.listAddButton}
-          onClick={() => setShowForm(true)}
-        >
+        <button className={styles.listAddButton} onClick={onAddClickHandler}>
           add new TO DO
         </button>
       )}
       {showForm && (
-        <>
-          <input
-            className={styles.listInput}
-            value={formData.note}
-            name="note"
-            placeholder="enter task..."
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                note: e.target.value,
-              }))
-            }
-          />
-          <textarea
-            className={styles.listInput}
-            value={formData.description}
-            name="description"
-            placeholder="describe your task..."
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                description: e.target.value,
-              }))
-            }
-          />
-          <label className={styles.checkboxLabel}>
-            <input
-              className={styles.checkbox}
-              type="checkbox"
-              checked={formData.completed}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  completed: e.target.checked,
-                }))
-              }
-            />
-            already done
-          </label>
-          {error && <p className={styles.error}>{error}</p>}
-          <button
-            className={styles.listAddButton}
-            onClick={onClickHandler}
-            disabled={isSaving}
-          >
-            {isSaving
-              ? "saving..."
-              : editingId !== null
-                ? "save changes"
-                : "add TO DO"}
-          </button>
-        </>
+        <TodoForm
+          key={editingId ?? "new"}
+          initialData={initialData}
+          isEditing={editingId !== null}
+          isSaving={isSaving}
+          requestError={requestError}
+          onSubmit={onSubmitHandler}
+        />
       )}
     </div>
   );
 };
 
 export default ListComponent;
-
-// { id: uuidv4(), note: "buy flowers", completed: false },
-// { id: uuidv4(), note: "cook dinner", completed: false },
-// { id: uuidv4(), note: "send a package", completed: false },
-// { id: uuidv4(), note: "read a book", completed: false },
 
 // З лекції:
 

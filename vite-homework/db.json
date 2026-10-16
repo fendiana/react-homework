@@ -1,13 +1,6 @@
 {
   "todos": [
     {
-      "note": "read a chapter",
-      "description": "from a new book",
-      "completed": false,
-      "creationDate": "2026-10-15",
-      "id": "-dd-e8O9brc"
-    },
-    {
       "note": "pet a cat",
       "description": "",
       "completed": false,
@@ -20,6 +13,20 @@
       "completed": false,
       "creationDate": "2026-10-15",
       "id": "gwxuSiqneGI"
+    },
+    {
+      "note": "cook dinner",
+      "description": "",
+      "completed": false,
+      "creationDate": "2026-10-16",
+      "id": "Ngea_2cgvfM"
+    },
+    {
+      "note": "read a chapter",
+      "description": "",
+      "completed": false,
+      "creationDate": "2026-10-16",
+      "id": "rX5Tuwzodls"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

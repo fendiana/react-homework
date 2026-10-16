@@ -74,6 +74,13 @@
   color: #242019;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .listInput {
   align-self: center;
   padding: 8px;

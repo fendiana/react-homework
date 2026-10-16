@@ -1,27 +1,38 @@
-import React from "react";
 import styles from "./ListItemComponent.module.css";
 
-const ListItemComponent = (props) => {
+const ListItemComponent = ({
+  id,
+  item,
+  description,
+  completed,
+  onDone,
+  onDelete,
+  onEdit,
+  isDeleting,
+}) => {
   return (
     <li className={styles.listItem}>
-      <p className={props.completed ? styles.completed : ""}>{props.item}</p>
+      <div className={styles.listItemText}>
+        <p className={completed ? styles.completed : ""}>{item}</p>
+        {description && <p className={styles.todoDescription}>{description}</p>}
+      </div>
       <div className={styles.changeBtns}>
         <button
           className={styles.listItemEditButton}
-          onClick={() => props.onEdit(props.id)}
+          onClick={() => onEdit(id)}
         >
           edit
         </button>
         <input
           className={styles.checkbox}
           type="checkbox"
-          checked={props.completed}
-          onChange={() => props.onDone(props.id)}
+          checked={completed}
+          onChange={() => onDone(id)}
         />
         <button
           className={styles.listItemDoneButton}
-          onClick={() => props.onDelete(props.id)}
-          disabled={props.isDeleting}
+          onClick={() => onDelete(id)}
+          disabled={isDeleting}
         >
           X
         </button>

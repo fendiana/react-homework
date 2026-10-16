@@ -12,6 +12,19 @@
   overflow-wrap: anywhere;
 }
 
+.listItemText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.todoDescription {
+  margin: 4px 0 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
 .completed {
   text-decoration: line-through;
   color: #dbd4ce;
