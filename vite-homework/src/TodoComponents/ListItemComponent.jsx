@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./ListItemComponent.module.css";
 
 const ListItemComponent = ({
@@ -7,7 +8,6 @@ const ListItemComponent = ({
   completed,
   onDone,
   onDelete,
-  onEdit,
   isDeleting,
 }) => {
   return (
@@ -17,12 +17,9 @@ const ListItemComponent = ({
         {description && <p className={styles.todoDescription}>{description}</p>}
       </div>
       <div className={styles.changeBtns}>
-        <button
-          className={styles.listItemEditButton}
-          onClick={() => onEdit(id)}
-        >
+        <Link className={styles.listItemEditButton} to={`/todo-list/${id}`}>
           edit
-        </button>
+        </Link>
         <input
           className={styles.checkbox}
           type="checkbox"

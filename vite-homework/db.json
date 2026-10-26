@@ -9,14 +9,14 @@
     },
     {
       "note": "buy flowers",
-      "description": "",
+      "description": "get peonies, roses, tulips and dried flowers",
       "completed": false,
       "creationDate": "2026-10-15",
       "id": "gwxuSiqneGI"
     },
     {
-      "note": "cook dinner",
-      "description": "",
+      "note": "cook supper",
+      "description": "soup maybe",
       "completed": false,
       "creationDate": "2026-10-16",
       "id": "Ngea_2cgvfM"
@@ -24,9 +24,16 @@
     {
       "note": "read a chapter",
       "description": "",
-      "completed": false,
+      "completed": true,
       "creationDate": "2026-10-16",
       "id": "rX5Tuwzodls"
+    },
+    {
+      "note": "walk in the park",
+      "description": "",
+      "completed": false,
+      "creationDate": "2026-10-26",
+      "id": "fEkEfkf_zCs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

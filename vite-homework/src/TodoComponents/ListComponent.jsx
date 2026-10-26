@@ -13,7 +13,6 @@ const EMPTY_FORM = {
   note: "",
   description: "",
   completed: false,
-  creationDate: "",
 };
 
 const ListComponent = () => {
@@ -24,17 +23,13 @@ const ListComponent = () => {
     requestError,
     setRequestError,
     isSaving,
-    isEditLoading,
     deletingId,
     saveTodo,
-    loadTodoById,
     toggleTodo,
     removeTodo,
   } = useTodos();
 
   const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [initialData, setInitialData] = useState(() => ({ ...EMPTY_FORM }));
   const [filter, setFilter] = useState("all");
 
   const filteredItems = item.filter((todo) => {
@@ -49,26 +44,7 @@ const ListComponent = () => {
   });
 
   const onAddClickHandler = () => {
-    setEditingId(null);
-    setInitialData({ ...EMPTY_FORM });
     setRequestError("");
-    setShowForm(true);
-  };
-
-  const onEditHandler = async (id) => {
-    const todo = await loadTodoById(id);
-
-    if (!todo) return;
-
-    setEditingId(todo.id);
-
-    setInitialData({
-      note: todo.note ?? "",
-      description: todo.description ?? "",
-      completed: todo.completed ?? false,
-      creationDate: todo.creationDate ?? "",
-    });
-
     setShowForm(true);
   };
 
@@ -77,18 +53,13 @@ const ListComponent = () => {
       note: formData.note.trim(),
       description: formData.description.trim(),
       completed: formData.completed,
-      creationDate:
-        editingId !== null
-          ? initialData.creationDate
-          : new Date().toISOString().slice(0, 10),
+      creationDate: new Date().toISOString().slice(0, 10),
     };
 
-    const success = await saveTodo(todoData, editingId);
+    const success = await saveTodo(todoData, null);
 
     if (success) {
       setShowForm(false);
-      setEditingId(null);
-      setInitialData({ ...EMPTY_FORM });
       setRequestError("");
     }
 
@@ -119,7 +90,6 @@ const ListComponent = () => {
       {requestError && !showForm && (
         <TodoStatus type="error" message={requestError} />
       )}
-      {isEditLoading && <TodoStatus type="loading" message="loading task..." />}
       {item.length === 0 && !showForm && <TodoStatus type="empty" />}
       {item.length > 0 && (
         <>
@@ -128,7 +98,6 @@ const ListComponent = () => {
             items={filteredItems}
             onDone={toggleTodo}
             onDelete={removeTodo}
-            onEdit={onEditHandler}
             deletingId={deletingId}
           />
           <TodoCount items={item} />
@@ -141,9 +110,7 @@ const ListComponent = () => {
       )}
       {showForm && (
         <TodoForm
-          key={editingId ?? "new"}
-          initialData={initialData}
-          isEditing={editingId !== null}
+          initialData={EMPTY_FORM}
           isSaving={isSaving}
           requestError={requestError}
           onSubmit={onSubmitHandler}

@@ -1,0 +1,49 @@
+.page {
+  max-width: 440px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 32px;
+  background-color: #f0ebe7;
+  color: #242019;
+  border-radius: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  margin: 0 0 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 24px;
+}
+
+.subtitle {
+  margin: 24px 0 10px;
+  font-size: 18px;
+}
+
+.welcomeText {
+  text-align: center;
+  line-height: 1.5;
+}
+
+.text,
+.features {
+  margin-top: 0;
+  line-height: 1.5;
+}
+
+.primaryLink {
+  display: block;
+  width: fit-content;
+  margin: 24px auto 0;
+  padding: 8px 18px;
+  border-radius: 10px;
+  background-color: #b6cbde;
+  color: #242019;
+  text-decoration: none;
+}
+
+.primaryLink:hover {
+  background-color: #a2c0dd;
+}

@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  getTodos,
-  getTodoById,
-  createTodo,
-  updateTodo,
-  deleteTodo,
-} from "../api/todosApi";
+import { getTodos, createTodo, updateTodo, deleteTodo } from "../api/todosApi";
 
 const useTodos = () => {
   const [item, setItem] = useState([]);
@@ -14,7 +8,6 @@ const useTodos = () => {
 
   const [requestError, setRequestError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [isEditLoading, setIsEditLoading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
@@ -83,21 +76,6 @@ const useTodos = () => {
     }
   };
 
-  const loadTodoById = async (id) => {
-    try {
-      setIsEditLoading(true);
-      setRequestError("");
-
-      return await getTodoById(id);
-    } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Couldn't load task :(");
-      return null;
-    } finally {
-      setIsEditLoading(false);
-    }
-  };
-
   const toggleTodo = async (id) => {
     const currentTodo = item.find((todo) => todo.id === id);
 
@@ -145,10 +123,8 @@ const useTodos = () => {
     requestError,
     setRequestError,
     isSaving,
-    isEditLoading,
     deletingId,
     saveTodo,
-    loadTodoById,
     toggleTodo,
     removeTodo,
   };

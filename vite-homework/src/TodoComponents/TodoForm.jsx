@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./ListComponent.module.css";
 
 const MIN_LENGTH = 3;
@@ -6,11 +7,14 @@ const MAX_LENGTH = 30;
 
 const TodoForm = ({
   initialData,
-  isEditing,
   isSaving,
   requestError,
   onSubmit,
+  submitAsLink = false,
+  submitTo = "/todo-list",
 }) => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState(() => ({
     note: initialData.note ?? "",
     description: initialData.description ?? "",
@@ -58,6 +62,10 @@ const TodoForm = ({
 
     if (success) {
       setError("");
+
+      if (submitAsLink) {
+        navigate(submitTo);
+      }
     }
   };
 
@@ -93,13 +101,24 @@ const TodoForm = ({
       </label>
       {error && <p className={styles.error}>{error}</p>}
       {requestError && <p className={styles.error}>{requestError}</p>}
-      <button
-        className={styles.listAddButton}
-        type="submit"
-        disabled={isSaving}
-      >
-        {isSaving ? "saving..." : isEditing ? "save changes" : "add TO DO"}
-      </button>
+      {submitAsLink ? (
+        <Link
+          to={submitTo}
+          className={styles.listAddButton}
+          onClick={onSubmitHandler}
+          aria-disabled={isSaving}
+        >
+          {isSaving ? "saving..." : "save changes"}
+        </Link>
+      ) : (
+        <button
+          className={styles.listAddButton}
+          type="submit"
+          disabled={isSaving}
+        >
+          {isSaving ? "saving..." : "add TO DO"}
+        </button>
+      )}
     </form>
   );
 };

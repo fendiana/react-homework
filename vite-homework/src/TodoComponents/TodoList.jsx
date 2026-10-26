@@ -1,7 +1,7 @@
 import ListItemComponent from "./ListItemComponent";
 import styles from "./ListComponent.module.css";
 
-const TodoList = ({ items, onDone, onDelete, onEdit, deletingId }) => {
+const TodoList = ({ items, onDone, onDelete, deletingId }) => {
   console.log(
     "todo ids:",
     items.map((todo) => todo.id),
@@ -17,7 +17,6 @@ const TodoList = ({ items, onDone, onDelete, onEdit, deletingId }) => {
           description={todo.description}
           onDone={onDone}
           onDelete={onDelete}
-          onEdit={onEdit}
           isDeleting={deletingId === todo.id}
           completed={todo.completed}
         />
