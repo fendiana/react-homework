@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import Loader from "./components/Loader";
 
 import "./App.css";
 
@@ -14,7 +15,7 @@ const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
 
 function App() {
   return (
-    <Suspense fallback={<div className="routeFallback">loading page...</div>}>
+    <Suspense fallback={<Loader label="loading page..." />}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
