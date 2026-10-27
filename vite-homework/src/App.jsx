@@ -1,23 +1,36 @@
-import { Routes, Route } from "react-router-dom";
-
-import Layout from "./layouts/Layout";
-import HomePage from "./pages/HomePage";
-import EditTodoPage from "./pages/EditTodoPage";
-import AboutPage from "./pages/AboutPage";
-import ListComponent from "./TodoComponents/ListComponent";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 import "./App.css";
 
+const Layout = lazy(() => import("./layouts/Layout"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const EditTodoPage = lazy(() => import("./pages/EditTodoPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const ListComponent = lazy(() => import("./TodoComponents/ListComponent"));
+const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
+
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="todo-list" element={<ListComponent />} />
-        <Route path="todo-list/:id" element={<EditTodoPage />} />
-        <Route path="about" element={<AboutPage />} />
-      </Route>
-    </Routes>
+    <Suspense fallback={<div className="routeFallback">loading page...</div>}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="error-page" element={<ErrorPage />} />
+          <Route path="not-found-page" element={<NotFoundPage />} />
+
+          <Route element={<PrivateRoute />}>
+            <Route path="todo-list" element={<ListComponent />} />
+            <Route path="todo-list/:id" element={<EditTodoPage />} />
+            <Route path="about" element={<AboutPage />} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/not-found-page" replace />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
 

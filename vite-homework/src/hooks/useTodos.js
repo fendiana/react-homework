@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { getTodos, createTodo, updateTodo, deleteTodo } from "../api/todosApi";
 
 const useTodos = () => {
@@ -9,6 +10,18 @@ const useTodos = () => {
   const [requestError, setRequestError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+
+  const navigate = useNavigate();
+
+  const redirectToError = useCallback(
+    (message) => {
+      navigate("/error-page", {
+        replace: true,
+        status: { message },
+      });
+    },
+    [navigate],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -24,10 +37,11 @@ const useTodos = () => {
           setItem(data);
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error loading tasks:", error);
 
         if (!cancelled) {
           setFetchError("Failed to load :(");
+          redirectToError("Failed to load tasks :(");
         }
       } finally {
         if (!cancelled) {
@@ -41,7 +55,7 @@ const useTodos = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [redirectToError]);
 
   const saveTodo = async (todoData, editingId) => {
     const isEditing = editingId !== null;
@@ -56,7 +70,9 @@ const useTodos = () => {
 
       if (isEditing) {
         setItem((prev) =>
-          prev.map((todo) => (todo.id === editingId ? savedTodo : todo)),
+          prev.map((todo) =>
+            String(todo.id) === String(editingId) ? savedTodo : todo,
+          ),
         );
       } else {
         setItem((prev) => [...prev, savedTodo]);
@@ -64,11 +80,14 @@ const useTodos = () => {
 
       return true;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error saving tasks:", error);
 
-      setRequestError(
-        isEditing ? "Couldn't save changes :(" : "Couldn't add task :(",
-      );
+      const message = isEditing
+        ? "Couldn't save changes :("
+        : "Couldn't add task :(";
+
+      setRequestError(message);
+      redirectToError(message);
 
       return false;
     } finally {
@@ -77,7 +96,7 @@ const useTodos = () => {
   };
 
   const toggleTodo = async (id) => {
-    const currentTodo = item.find((todo) => todo.id === id);
+    const currentTodo = item.find((todo) => String(todo.id) === String(id));
 
     if (!currentTodo) return;
 
@@ -92,11 +111,11 @@ const useTodos = () => {
       const savedTodo = await updateTodo(id, updatedTodo);
 
       setItem((prev) =>
-        prev.map((todo) => (todo.id === id ? savedTodo : todo)),
+        prev.map((todo) => (String(todo.id) === String(id) ? savedTodo : todo)),
       );
     } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Couldn't update task :(");
+      console.error("Error updating task:", error);
+      redirectToError("Couldn't update task :(");
     }
   };
 
@@ -107,10 +126,10 @@ const useTodos = () => {
 
       await deleteTodo(id);
 
-      setItem((prev) => prev.filter((todo) => todo.id !== id));
+      setItem((prev) => prev.filter((todo) => String(todo.id) !== String(id)));
     } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Couldn't delete task :(");
+      console.error("Error deleting task:", error);
+      redirectToError("Couldn't delete task :(");
     } finally {
       setDeletingId(null);
     }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getTodoById, updateTodo } from "../api/todosApi";
 import TodoStatus from "../TodoComponents/TodoStatus";
 import TodoForm from "../TodoComponents/TodoForm";
@@ -8,10 +8,10 @@ import styles from "../TodoComponents/ListComponent.module.css";
 
 const EditTodoPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [todo, setTodo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setFetchError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [requestError, setRequestError] = useState("");
 
@@ -21,7 +21,7 @@ const EditTodoPage = () => {
     const loadTodo = async () => {
       try {
         setIsLoading(true);
-        setFetchError("");
+        setRequestError("");
         setTodo(null);
 
         const data = await getTodoById(id);
@@ -30,10 +30,15 @@ const EditTodoPage = () => {
           setTodo(data);
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error loading task:", error);
 
-        if (isCurrent) {
-          setFetchError("Coudn't load task :(");
+        if (isCurrent && error.status === 404) {
+          navigate("/not-found-page", { replace: true });
+        } else if (isCurrent) {
+          navigate("/error-page", {
+            replace: true,
+            state: { message: "Coudn't load task :(" },
+          });
         }
       } finally {
         if (isCurrent) {
@@ -47,10 +52,10 @@ const EditTodoPage = () => {
     return () => {
       isCurrent = false;
     };
-  }, [id]);
+  }, [id, navigate]);
 
   const handleSave = async (formData) => {
-    if (!todo) return false;
+    if (!todo || isSaving) return false;
 
     try {
       setIsSaving(true);
@@ -65,8 +70,17 @@ const EditTodoPage = () => {
 
       return true;
     } catch (error) {
-      console.error("Error:", error);
-      setRequestError("Coudn't load task :(");
+      console.error("Error saving task:", error);
+
+      if (error.status === 404) {
+        navigate("/not-found-page", { replace: true });
+      } else if (isCurrent) {
+        navigate("/error-page", {
+          replace: true,
+          state: { message: "Coudn't save changes :(" },
+        });
+      }
+
       return false;
     } finally {
       setIsSaving(false);
@@ -82,16 +96,13 @@ const EditTodoPage = () => {
     );
   }
 
-  if (fetchError || !todo) {
+  if (!todo) {
     return (
       <div className={styles.listContainer}>
         <h2 className={styles.listMainTitle}>edit task</h2>
-        <TodoStatus
-          type="error"
-          message={fetchError || "Couldn't load task :("}
-        />
+        <TodoStatus type="error" message={"Couldn't load task :("} />
         <Link to="/todo-list" className={styles.backLink}>
-          back to to do list
+          back to home
         </Link>
       </div>
     );
@@ -104,7 +115,6 @@ const EditTodoPage = () => {
       <TodoForm
         key={todo.id}
         initialData={todo}
-        isEditing={true}
         isSaving={isSaving}
         requestError={requestError}
         onSubmit={handleSave}

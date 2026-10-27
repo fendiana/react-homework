@@ -9,7 +9,7 @@
     },
     {
       "note": "buy flowers",
-      "description": "get peonies, roses, tulips and dried flowers",
+      "description": "get peonies, roses and tulips",
       "completed": false,
       "creationDate": "2026-10-15",
       "id": "gwxuSiqneGI"
@@ -30,11 +30,17 @@
     },
     {
       "note": "walk in the park",
-      "description": "",
+      "description": "Letna park",
       "completed": false,
       "creationDate": "2026-10-26",
       "id": "fEkEfkf_zCs"
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
+  "auth": [
+    {
+      "id": "1",
+      "isAuthenticated": true
+    }
+  ],
+  "$schema": ["./node_modules/json-server/schema.json"]
 }

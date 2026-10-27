@@ -16,12 +16,12 @@ const AboutPage = () => {
       </ul>
       <h3 className={styles.subtitle}>made with</h3>
       <p className={styles.text}>
-        react, react router, json-server, and css modules
+        vite, react, react router, json-server and css modules
       </p>
       <h3 className={styles.subtitle}>about the author</h3>
       <p className={styles.text}>
         this project was created as part of a frontend learning journey to
-        practice react, routing, components, and working with an api
+        practice components, react, routing and working with an api
       </p>
     </section>
   );
