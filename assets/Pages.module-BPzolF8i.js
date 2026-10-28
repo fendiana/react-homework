@@ -1,0 +1,1 @@
+var e={page:`_page_1npuu_1`,title:`_title_1npuu_13`,subtitle:`_subtitle_1npuu_20`,welcomeText:`_welcomeText_1npuu_25`,text:`_text_1npuu_30`,features:`_features_1npuu_31`,primaryLink:`_primaryLink_1npuu_36`};export{e as t};
