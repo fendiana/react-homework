@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getTodoById, updateTodo } from "../api/todosApi";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTodo, fetchTodoById, cleartCurrentTodo } from "../api/todosApi";
 import TodoStatus from "../TodoComponents/TodoStatus";
 import TodoForm from "../TodoComponents/TodoForm";
 
@@ -8,86 +9,85 @@ import styles from "../TodoComponents/ListComponent.module.css";
 
 const EditTodoPage = () => {
   const { id } = useParams();
+  const dispatch = useNavigate();
   const navigate = useNavigate();
 
-  const [todo, setTodo] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [requestError, setRequestError] = useState("");
+  const {
+    currentTodo,
+    isEditLoading,
+    currentTodoError,
+    isSaving,
+    requestError,
+  } = useSelector((state) => state.todos);
 
   useEffect(() => {
-    let isCurrent = true;
+    let active = true;
+
+    dispatch(clearCurrentTodo());
 
     const loadTodo = async () => {
-      try {
-        setIsLoading(true);
-        setRequestError("");
-        setTodo(null);
+      const result = await dispatch(fetchTodoById(id));
 
-        const data = await getTodoById(id);
-
-        if (isCurrent) {
-          setTodo(data);
-        }
-      } catch (error) {
-        console.error("Error loading task:", error);
-
-        if (isCurrent && error.status === 404) {
-          navigate("/not-found-page", { replace: true });
-        } else if (isCurrent) {
-          navigate("/error-page", {
-            replace: true,
-            state: { message: "Coudn't load task :(" },
-          });
-        }
-      } finally {
-        if (isCurrent) {
-          setIsLoading(false);
-        }
+      if (!active || !fetchTodoById.rejected.match(result)) {
+        return;
       }
-    };
 
-    loadTodo();
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [id, navigate]);
-
-  const handleSave = async (formData) => {
-    if (!todo || isSaving) return false;
-
-    try {
-      setIsSaving(true);
-      setRequestError("");
-
-      await updateTodo(id, {
-        ...todo,
-        note: formData.note.trim(),
-        description: formData.description.trim(),
-        completed: formData.completed,
-      });
-
-      return true;
-    } catch (error) {
-      console.error("Error saving task:", error);
+      const error = result.payload;
 
       if (error.status === 404) {
         navigate("/not-found-page", { replace: true });
       } else if (isCurrent) {
         navigate("/error-page", {
           replace: true,
-          state: { message: "Coudn't save changes :(" },
+          state: { message: error?.message ?? "Coudn't load task :(" },
         });
       }
+    };
 
-      return false;
-    } finally {
-      setIsSaving(false);
+    loadTodo();
+
+    return () => {
+      active = false;
+      dispatch(cleartCurrentTodo());
+    };
+  }, [id, dispatch, navigate]);
+
+  const handleSave = async (formData) => {
+    if (!currentTodo || isSaving) return false;
+
+    const todoData = {
+      ...currentTodo,
+      note: formData.note.trim(),
+      description: formData.description.trim(),
+      completed: formData.completed,
+    };
+
+    const result = awaitvdispatch(
+      updateTodo({
+        id,
+        todoData,
+      }),
+    );
+
+    if (updateTodo.fulfilled.match(result)) {
+      return true;
     }
+
+    const error = result.payload;
+
+    if (error?.status === 404) {
+      navigate("/not-found-page", { replace: true });
+    } else {
+      navigate("/error-page", {
+        replace: true,
+        state: { message: error?.message ?? "Coudn't save changes :(" },
+      });
+    }
+
+    return false;
   };
 
-  if (isLoading) {
+  if (isEditLoading || (!currentTodo && !currentTodoError)) {
     return (
       <div className={styles.listContainer}>
         <h2 className={styles.listMainTitle}>edit task</h2>
@@ -96,7 +96,7 @@ const EditTodoPage = () => {
     );
   }
 
-  if (!todo) {
+  if (!currentTodo) {
     return (
       <div className={styles.listContainer}>
         <h2 className={styles.listMainTitle}>edit task</h2>
@@ -113,8 +113,8 @@ const EditTodoPage = () => {
       <h2 className={styles.listMainTitle}>edit task</h2>
 
       <TodoForm
-        key={todo.id}
-        initialData={todo}
+        key={String(currentTodo.id)}
+        initialData={currentTodo}
         isSaving={isSaving}
         requestError={requestError}
         onSubmit={handleSave}

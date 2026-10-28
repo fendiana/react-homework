@@ -10,7 +10,13 @@ export class ApiError extends Error {
 }
 
 const request = async (url, options = {}) => {
-  const response = await fetch(url, options);
+  let response;
+
+  try {
+    response = await fetch(url, options);
+  } catch {
+    throw new ApiError(0, "server is unavailable :(");
+  }
 
   if (!response.ok) {
     throw new ApiError(response.status, `Request failed (${response.status})`);

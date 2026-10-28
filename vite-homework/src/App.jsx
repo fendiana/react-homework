@@ -15,7 +15,7 @@ const PrivateRoute = lazy(() => import("./components/PrivateRoute"));
 
 function App() {
   return (
-    <Suspense fallback={<Loader label="loading page..." />}>
+    <Suspense fallback={<Loader label="" />}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />

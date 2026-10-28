@@ -16,10 +16,10 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
       try {
-        const authenticted = await getAuthStatus();
+        const authenticated = await getAuthStatus();
 
         if (isCurrent) {
-          setIsAuthenticated(authenticted);
+          setIsAuthenticated(authenticated);
         }
       } catch (error) {
         console.error("Authentication error:", error);

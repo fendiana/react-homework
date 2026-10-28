@@ -1,5 +1,13 @@
-import { useState } from "react";
-import useTodos from "../hooks/useTodos";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchTodos,
+  addTodo,
+  updateTodo,
+  deleteTodo,
+  clearTodoErrors,
+} from "../features/todos/todosSlice";
 
 import TodoForm from "./TodoForm";
 import TodoFilter from "./TodoFilter";
@@ -16,23 +24,43 @@ const EMPTY_FORM = {
 };
 
 const ListComponent = () => {
-  const {
-    item,
-    isLoading,
-    fetchError,
-    requestError,
-    setRequestError,
-    isSaving,
-    deletingId,
-    saveTodo,
-    toggleTodo,
-    removeTodo,
-  } = useTodos();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { items, isLoading, fetchError, requestError, isSaving, deletingId } =
+    useSelector((state) => state.todos);
 
   const [showForm, setShowForm] = useState(false);
   const [filter, setFilter] = useState("all");
 
-  const filteredItems = item.filter((todo) => {
+  useEffect(() => {
+    let active = true;
+
+    dispatch(clearTodoErrors());
+
+    const loadTodos = async () => {
+      const result = await dispatch(fetchTodos());
+
+      if (!active || !fetchTodos.rejected.match(result)) {
+        return;
+      }
+
+      navigate("/error-page", {
+        replace: true,
+        satte: {
+          message: result.payload?.message ?? "Failed to load :(",
+        },
+      });
+    };
+
+    loadTodos();
+
+    return () => {
+      active = false;
+    };
+  }, [dispatch, navigate]);
+
+  const filteredItems = items.filter((todo) => {
     if (filter === "active") {
       return !todo.completed;
     }
@@ -44,7 +72,7 @@ const ListComponent = () => {
   });
 
   const onAddClickHandler = () => {
-    setRequestError("");
+    dispatch(clearTodoErrors());
     setShowForm(true);
   };
 
@@ -56,14 +84,60 @@ const ListComponent = () => {
       creationDate: new Date().toISOString().slice(0, 10),
     };
 
-    const success = await saveTodo(todoData, null);
+    const result = await dispatch(addTodo(todoData));
 
-    if (success) {
+    if (addTodo.fullfiled.match(result)) {
       setShowForm(false);
-      setRequestError("");
+      dispatch(clearTodoErrors());
+      return true;
     }
 
-    return success;
+    navigate("/error-page", {
+      replace: true,
+      state: {
+        message: result.payload?.message ?? "Couldn't add task :(",
+      },
+    });
+
+    return false;
+  };
+
+  const onDoneHandler = async (id) => {
+    const todo = items.find((item) => String(item.id) === String(id));
+
+    if (!todo) return;
+
+    const result = await dispatch(
+      updateTodo({
+        id,
+        todoData: {
+          ...todo,
+          completed: !todo.completed,
+        },
+      }),
+    );
+
+    if (updateTodo.rejected.match(result)) {
+      navigate("/error-page", {
+        replace: true,
+        state: {
+          message: result.payload?.message ?? "Couldn't update task :(",
+        },
+      });
+    }
+  };
+
+  const onDeleteHandler = async (id) => {
+    const result = await dispatch(deleteTodo(id));
+
+    if (deleteTodo.rejected.match(result)) {
+      navigate("/error-page", {
+        replace: true,
+        state: {
+          message: result.payload?.message ?? "Couldn't delete task :(",
+        },
+      });
+    }
   };
 
   if (isLoading) {
@@ -90,17 +164,17 @@ const ListComponent = () => {
       {requestError && !showForm && (
         <TodoStatus type="error" message={requestError} />
       )}
-      {item.length === 0 && !showForm && <TodoStatus type="empty" />}
-      {item.length > 0 && (
+      {items.length === 0 && !showForm && <TodoStatus type="empty" />}
+      {items.length > 0 && (
         <>
           <TodoFilter filter={filter} onChange={setFilter} />
           <TodoList
             items={filteredItems}
-            onDone={toggleTodo}
-            onDelete={removeTodo}
+            onDone={onDoneHandler}
+            onDelete={onDeleteHandler}
             deletingId={deletingId}
           />
-          <TodoCount items={item} />
+          <TodoCount items={items} />
         </>
       )}
       {!showForm && (

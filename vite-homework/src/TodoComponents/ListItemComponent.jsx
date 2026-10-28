@@ -14,7 +14,13 @@ const ListItemComponent = ({
     <li className={styles.listItem}>
       <div className={styles.listItemText}>
         <p className={completed ? styles.completed : ""}>{item}</p>
-        {description && <p className={styles.todoDescription}>{description}</p>}
+        {description && (
+          <p
+            className={`${styles.todoDescription} ${completed ? styles.completed : ""}`}
+          >
+            {description}
+          </p>
+        )}
       </div>
       <div className={styles.changeBtns}>
         <Link className={styles.listItemEditButton} to={`/todo-list/${id}`}>
@@ -28,6 +34,7 @@ const ListItemComponent = ({
         />
         <button
           className={styles.listItemDoneButton}
+          type="button"
           onClick={() => onDelete(id)}
           disabled={isDeleting}
         >

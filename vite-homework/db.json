@@ -31,7 +31,7 @@
     {
       "note": "walk in the park",
       "description": "Letna park",
-      "completed": false,
+      "completed": true,
       "creationDate": "2026-10-26",
       "id": "fEkEfkf_zCs"
     }
@@ -42,5 +42,5 @@
       "isAuthenticated": true
     }
   ],
-  "$schema": ["./node_modules/json-server/schema.json"]
+  "$schema": "./node_modules/json-server/schema.json"
 }
