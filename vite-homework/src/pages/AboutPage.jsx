@@ -2,27 +2,47 @@ import styles from "./Pages.module.css";
 
 const AboutPage = () => {
   return (
-    <section className={styles.page}>
+    <section className={`${styles.page} ${styles.aboutPage}`}>
       <h2 className={styles.title}>about this app</h2>
-      <p className={styles.text}>
-        this is a simple to do list to help you organize your tasks in one place
-        :)
+      <p className={styles.intro}>
+        a simple little list to help you stay organized, one task at a time :)
       </p>
-      <h3 className={styles.subtitle}>features</h3>
-      <ul className={styles.features}>
-        <li>create tasks and add descriptions</li>
-        <li>mark tasks as completed</li>
-        <li>filter active and completed tasks</li>
-        <li>edit and delete tasks</li>
-      </ul>
-      {/* <h3 className={styles.subtitle}>made with</h3>
-      <p className={styles.text}>
-        vite, react, react router, json-server and css modules
-      </p> */}
-      <h3 className={styles.subtitle}>about the author</h3>
-      <p className={styles.text}>
-        this project was created as part of a frontend learning journey to
-        practice components, react, routing and working with an api
+      <div className={styles.featuresSection}>
+        <h3 className={styles.subtitle}>what you can do</h3>
+        <ul className={styles.features}>
+          <li>
+            <span className={styles.featureIcon}>＋</span>
+            <span>create tasks and add descriptions</span>
+          </li>
+          <li>
+            <span className={styles.featureIcon}>✓</span>
+            <span>check off completed tasks</span>
+          </li>
+          <li>
+            <span className={styles.featureIcon}>↗</span>
+            <span>filter tasks by their status</span>
+          </li>
+          <li>
+            <span className={styles.featureIcon}>✎</span>
+            <span>edit or delete tasks anytime</span>
+          </li>
+        </ul>
+      </div>
+      <div className={styles.madeWith}>
+        <h3 className={styles.madeWithLabel}>made with</h3>
+        <p className={styles.text}>
+          vite · react · react router · redux toolkit · css modules
+        </p>
+      </div>
+      <div className={styles.authorSection}>
+        <h3 className={styles.subtitle}>a little note</h3>
+        <p className={styles.text}>
+          made as part of my frontend learning journey, with curiosity,
+          practice, and a little love for simple things
+        </p>
+      </div>
+      <p className={styles.aboutFooter}>
+        one task at a time <span>♡</span>
       </p>
     </section>
   );

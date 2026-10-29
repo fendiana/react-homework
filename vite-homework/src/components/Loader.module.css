@@ -46,3 +46,26 @@
     opacity: 1;
   }
 }
+
+@media (max-width: 768px) {
+  .loader {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loader {
+    padding: 16px 8px;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .dots {
+    gap: 5px;
+  }
+
+  .dots span {
+    width: 6px;
+    height: 6px;
+  }
+}

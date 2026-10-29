@@ -13,7 +13,11 @@ const ListItemComponent = ({
   return (
     <li className={styles.listItem}>
       <div className={styles.listItemText}>
-        <p className={completed ? styles.completed : ""}>{item}</p>
+        <p
+          className={`${styles.todoText} ${completed ? styles.completed : ""}`}
+        >
+          {item}
+        </p>
         {description && (
           <p
             className={`${styles.todoDescription} ${completed ? styles.completed : ""}`}

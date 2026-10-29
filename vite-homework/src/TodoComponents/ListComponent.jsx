@@ -47,7 +47,7 @@ const ListComponent = () => {
 
       navigate("/error-page", {
         replace: true,
-        satte: {
+        state: {
           message: result.payload?.message ?? "Failed to load :(",
         },
       });
@@ -86,7 +86,7 @@ const ListComponent = () => {
 
     const result = await dispatch(addTodo(todoData));
 
-    if (addTodo.fullfiled.match(result)) {
+    if (addTodo.fulfilled.match(result)) {
       setShowForm(false);
       dispatch(clearTodoErrors());
       return true;

@@ -1,20 +1,23 @@
 import { Link } from "react-router-dom";
 import styles from "./Pages.module.css";
+import homeIllustration from "../assets/home-page-note-list.png";
 
 const HomePage = () => {
   return (
-    <section className={styles.page}>
-      <h1 className={styles.title}>
+    <section className={`${styles.page} ${styles.homePage}`}>
+      <h2 className={styles.title}>
         welcome to <br />
         my little to do list
-      </h1>
-      <p className={styles.welcomeText}>
-        keep track of your tasks, add descriptions, mark completed tasks, and
-        stay organized
+      </h2>
+      <p className={styles.homeDescription}>
+        keep track of your tasks, add descriptions, and celebrate the little
+        things you get done
       </p>
-      <p className={styles.welcomeText}>
-        a little list to make your day feel easier :)
-      </p>
+      <img
+        className={styles.homeIllustration}
+        src={homeIllustration}
+        alt="a scrap of paper with a list of notes"
+      />
       <Link to="/todo-list" className={styles.primaryLink}>
         let's start
       </Link>

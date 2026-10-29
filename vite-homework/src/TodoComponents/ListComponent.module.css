@@ -1,11 +1,13 @@
 .listContainer {
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  max-width: 440px;
   width: 100%;
+  box-sizing: border-box;
   padding: 32px 20px;
   margin: 40px auto;
   background-color: #f0ebe7;
+  border: 1px solid #e5dcd5;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
@@ -128,7 +130,7 @@
 
 .listAddButton {
   align-self: center;
-  padding: 8px 16px;
+  padding: 10px 18px;
   background-color: #b6cbde;
   color: #242019;
   border: none;
@@ -137,8 +139,91 @@
   font-size: 16px;
   cursor: pointer;
   text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .listAddButton:hover {
   background-color: #a2c0dd;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .listContainer {
+    padding: 28px 20px;
+    margin: 24px auto;
+  }
+
+  .listMainTitle {
+    font-size: 22px;
+  }
+
+  .listFilterContainer {
+    padding: 8px 4px;
+  }
+
+  .listFilterTitle {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .taskCount {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .listContainer {
+    max-width: 100%;
+    padding: 20px;
+    margin: 16px auto;
+    border-radius: 10px;
+  }
+
+  .listMainTitle {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .listMessage {
+    font-size: 14px;
+  }
+
+  .listFilterContainer {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 8px 0;
+    gap: 8px;
+  }
+
+  .listFilter {
+    max-width: 120px;
+    font-size: 12px;
+  }
+
+  .form {
+    width: 100%;
+  }
+
+  .listInput {
+    box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .listAddButton {
+    max-width: 100%;
+    font-size: 14px;
+  }
+
+  .checkboxLabel {
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  .taskCount {
+    margin-top: 16px;
+    font-size: 12px;
+  }
 }
