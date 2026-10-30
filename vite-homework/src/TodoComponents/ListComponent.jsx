@@ -76,6 +76,11 @@ const ListComponent = () => {
     setShowForm(true);
   };
 
+  const onCancelHandler = () => {
+    setShowForm(false);
+    dispatch(clearTodoErrors());
+  };
+
   const onSubmitHandler = async (formData) => {
     const todoData = {
       note: formData.note.trim(),
@@ -188,6 +193,7 @@ const ListComponent = () => {
           isSaving={isSaving}
           requestError={requestError}
           onSubmit={onSubmitHandler}
+          onCancel={onCancelHandler}
         />
       )}
     </div>

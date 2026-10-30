@@ -135,7 +135,7 @@
   color: #242019;
   border: none;
   border-radius: 10px;
-  font-family: "Montserrat", sans-serif;
+  font-family: inherit;
   font-size: 16px;
   cursor: pointer;
   text-decoration: none;
@@ -147,6 +147,26 @@
 .listAddButton:hover {
   background-color: #a2c0dd;
   transform: translateY(-1px);
+}
+
+.listCancelButton {
+  padding: 10px 18px;
+  margin-top: 8px;
+  border: 1px solid #b6aca2;
+  border-radius: 10px;
+  background-color: transparent;
+  color: #242019;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.listCancelButton:hover:not(:disabled) {
+  background-color: #e5dcd5;
+  border-color: #9d9186;
 }
 
 @media (max-width: 768px) {

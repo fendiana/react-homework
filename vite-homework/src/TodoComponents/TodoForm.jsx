@@ -10,6 +10,7 @@ const TodoForm = ({
   isSaving,
   requestError,
   onSubmit,
+  onCancel,
   submitAsLink = false,
   submitTo = "/todo-list",
 }) => {
@@ -117,6 +118,16 @@ const TodoForm = ({
           disabled={isSaving}
         >
           {isSaving ? "saving..." : "add TO DO"}
+        </button>
+      )}
+      {onCancel && (
+        <button
+          className={styles.listCancelButton}
+          type="button"
+          onClick={onCancel}
+          disabled={isSaving}
+        >
+          cancel
         </button>
       )}
     </form>
