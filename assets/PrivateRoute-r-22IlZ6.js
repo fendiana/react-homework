@@ -1,1 +1,0 @@
-import{d as e,f as t,g as n,h as r}from"./index-BCIbS44q.js";var i=t(),a=()=>{let{isAuthenticated:t,isAuthLoading:a}=e();return a?(0,i.jsx)(`p`,{children:`checking access...`}):t?(0,i.jsx)(n,{}):(0,i.jsx)(r,{to:`/`,replace:!0})};export{a as default};
